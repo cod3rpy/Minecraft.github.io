@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статус серверов Minecraft</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        .server { padding: 10px; margin: 5px; border-radius: 5px; display: inline-block; }
+        .green { background-color: #4CAF50; color: white; }
+        .red { background-color: #F44336; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Статус серверов Minecraft</h1>
+    <button onclick="fetchStatus()">Обновить статус</button>
+    <div id="status-container"></div>
+
+    <script>
+        async function fetchStatus() {
+            const response = await fetch("/status");
+            const data = await response.json();
+            const container = document.getElementById("status-container");
+            container.innerHTML = "";
+            data.forEach(status => {
+                const [server, state] = Object.entries(status)[0];
+                const div = document.createElement("div");
+                div.className = `server ${state}`;
+                div.textContent = `${server}: ${state}`;
+                container.appendChild(div);
+            });
+        }
+        fetchStatus();
+    </script>
+</body>
+</html>
